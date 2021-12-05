@@ -1,14 +1,7 @@
 package com.omircon.shield_bash.datagen;
 
-import com.omircon.shield_bash.Registries;
 import com.omircon.shield_bash.ShieldBash;
-import com.omircon.shield_bash.glm.AutoSmeltLootModifier;
-import net.minecraft.advancements.criterion.EnchantmentPredicate;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.loot.conditions.MatchTool;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
 
 public class LootProvider extends GlobalLootModifierProvider {

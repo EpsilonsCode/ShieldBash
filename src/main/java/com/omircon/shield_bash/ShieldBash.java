@@ -1,14 +1,14 @@
 package com.omircon.shield_bash;
 
 import com.omircon.shield_bash.network.Network;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Items;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.util.Mth;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -63,8 +63,8 @@ public class ShieldBash
             //System.out.println(pUser.getType()); //source
             //System.out.println(event.getEntity().getType()); // target
 
-            if(pUser instanceof ServerPlayerEntity) {
-                ServerPlayerEntity player = (ServerPlayerEntity) pUser;
+            if(pUser instanceof ServerPlayer) {
+                ServerPlayer player = (ServerPlayer) pUser;
                 if(player.isUsingItem() && player.getUseItem().getItem() == Items.SHIELD)
                 {
                     int i = EnchantmentHelper.getItemEnchantmentLevel(Registries.SPIKES.get(), player.getUseItem());
@@ -81,13 +81,13 @@ public class ShieldBash
     public static void knockbackEvent(LivingHurtEvent event)
     {
         if(event.getSource().getEntity() != null)
-            if(event.getSource().getEntity() instanceof ServerPlayerEntity) {
-                ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getEntity();
+            if(event.getSource().getEntity() instanceof ServerPlayer) {
+                ServerPlayer player = (ServerPlayer) event.getSource().getEntity();
                 if(player.isUsingItem() && player.getUseItem().getItem() == Items.SHIELD)
                 {
                     int j = EnchantmentHelper.getItemEnchantmentLevel(Registries.SPIKES.get(), player.getUseItem());
                     float f = j+1;
-                    boolean flag2 = player.fallDistance > 0.0F && !player.isOnGround() && !player.onClimbable() && !player.isInWater() && !player.hasEffect(Effects.BLINDNESS) && !player.isPassenger() && event.getEntity() instanceof LivingEntity;
+                    boolean flag2 = player.fallDistance > 0.0F && !player.isOnGround() && !player.onClimbable() && !player.isInWater() && !player.hasEffect(MobEffects.BLINDNESS) && !player.isPassenger() && event.getEntity() instanceof LivingEntity;
                     flag2 = flag2 && !player.isSprinting();
                     if (flag2) {
                         f *= 1.5;
@@ -98,9 +98,9 @@ public class ShieldBash
                         Entity pTargetEntity = event.getEntity();
 
                         if (pTargetEntity instanceof LivingEntity) {
-                            ((LivingEntity) pTargetEntity).knockback((float) i * 0.5F, (double) MathHelper.sin(player.yRot * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(player.yRot * ((float) Math.PI / 180F))));
+                            ((LivingEntity) pTargetEntity).knockback((float) i * 0.5F, (double) Mth.sin(player.getYRot() * ((float) Math.PI / 180F)), (double) (-Mth.cos(player.getYRot() * ((float) Math.PI / 180F))));
                         } else {
-                            pTargetEntity.push((double) (-MathHelper.sin(player.yRot * ((float) Math.PI / 180F)) * (float) i * 0.5F), 0.1D, (double) (MathHelper.cos(player.yRot * ((float) Math.PI / 180F)) * (float) i * 0.5F));
+                            pTargetEntity.push((double) (-Mth.sin(player.getYRot() * ((float) Math.PI / 180F)) * (float) i * 0.5F), 0.1D, (double) (Mth.cos(player.getYRot() * ((float) Math.PI / 180F)) * (float) i * 0.5F));
                         }
                     }
                 }

@@ -1,25 +1,17 @@
 package com.omircon.shield_bash.network;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.item.Items;
-import net.minecraft.item.ShieldItem;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -28,14 +20,14 @@ import java.util.function.Supplier;
 public class ShieldBashPacket {
 
 
-    public ShieldBashPacket(PacketBuffer packetBuffer) {
+    public ShieldBashPacket(FriendlyByteBuf packetBuffer) {
     }
 
     public ShieldBashPacket() {
 
     }
 
-    public void toBytes(PacketBuffer buf) {
+    public void toBytes(FriendlyByteBuf buf) {
 
     }
 
@@ -44,15 +36,15 @@ public class ShieldBashPacket {
         //System.out.println("tgagfa");
         ctx.get().enqueueWork(() -> {
             //System.out.println("tset");
-            ServerPlayerEntity player = ctx.get().getSender();
+            ServerPlayer player = ctx.get().getSender();
             if(player.getUseItem().getItem() == Items.SHIELD && player.isUsingItem()) {
-                EntityRayTraceResult entityRayTraceResult = getEntityHitResult(player);
+                EntityHitResult entityRayTraceResult = getEntityHitResult(player);
                 if (entityRayTraceResult != null) {
                     Entity entity = entityRayTraceResult.getEntity();
                     if (entity != null) {
                         //System.out.println("check");
                         player.attack(entity);
-                        player.getCommandSenderWorld().playSound(null, player.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundCategory.PLAYERS, 1.0F, 0.8F + player.getCommandSenderWorld().random.nextFloat() * 0.4F);
+                        player.getCommandSenderWorld().playSound(null, player.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.PLAYERS, 1.0F, 0.8F + player.getCommandSenderWorld().random.nextFloat() * 0.4F);
                     }
                 }
             }
@@ -60,31 +52,31 @@ public class ShieldBashPacket {
         return true;
     }
 
-    public static EntityRayTraceResult getEntityHitResult(ServerPlayerEntity player)
+    public static EntityHitResult getEntityHitResult(ServerPlayer player)
     {
-        Vector3d vector3d = player.getEyePosition(0.0F);
+        Vec3 vector3d = player.getEyePosition(0.0F);
         double d0 = player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
         double d1 = d0;
-        Vector3d vector3d1 = player.getCamera().getViewVector(1.0F);
+        Vec3 vector3d1 = player.getCamera().getViewVector(1.0F);
 
-        Vector3d vector3d2 = vector3d.add(vector3d1.x * d0, vector3d1.y * d0, vector3d1.z * d0);
+        Vec3 vector3d2 = vector3d.add(vector3d1.x * d0, vector3d1.y * d0, vector3d1.z * d0);
         float f = 1.0F;
-        AxisAlignedBB axisalignedbb = player.getCamera().getBoundingBox().expandTowards(vector3d1.scale(d0)).inflate(1.0D, 1.0D, 1.0D);
+        AABB axisalignedbb = player.getCamera().getBoundingBox().expandTowards(vector3d1.scale(d0)).inflate(1.0D, 1.0D, 1.0D);
 
         return getEntityHitResult(player.getCamera(), vector3d, vector3d2, axisalignedbb, (p_215312_0_) -> {
             return !p_215312_0_.isSpectator() && p_215312_0_.isPickable();
         }, d1);
     }
 
-    public static EntityRayTraceResult getEntityHitResult(Entity p_221273_0_, Vector3d p_221273_1_, Vector3d p_221273_2_, AxisAlignedBB p_221273_3_, Predicate<Entity> p_221273_4_, double p_221273_5_) {
-        World world = p_221273_0_.level;
+    public static EntityHitResult getEntityHitResult(Entity p_221273_0_, Vec3 p_221273_1_, Vec3 p_221273_2_, AABB p_221273_3_, Predicate<Entity> p_221273_4_, double p_221273_5_) {
+        Level world = p_221273_0_.level;
         double d0 = p_221273_5_;
         Entity entity = null;
-        Vector3d vector3d = null;
+        Vec3 vector3d = null;
 
         for(Entity entity1 : world.getEntities(p_221273_0_, p_221273_3_, p_221273_4_)) {
-            AxisAlignedBB axisalignedbb = entity1.getBoundingBox().inflate((double)entity1.getPickRadius());
-            Optional<Vector3d> optional = axisalignedbb.clip(p_221273_1_, p_221273_2_);
+            AABB axisalignedbb = entity1.getBoundingBox().inflate((double)entity1.getPickRadius());
+            Optional<Vec3> optional = axisalignedbb.clip(p_221273_1_, p_221273_2_);
             if (axisalignedbb.contains(p_221273_1_)) {
                 if (d0 >= 0.0D) {
                     entity = entity1;
@@ -92,7 +84,7 @@ public class ShieldBashPacket {
                     d0 = 0.0D;
                 }
             } else if (optional.isPresent()) {
-                Vector3d vector3d1 = optional.get();
+                Vec3 vector3d1 = optional.get();
                 double d1 = p_221273_1_.distanceToSqr(vector3d1);
                 if (d1 < d0 || d0 == 0.0D) {
                     if (entity1.getRootVehicle() == p_221273_0_.getRootVehicle() && !entity1.canRiderInteract()) {
@@ -109,7 +101,7 @@ public class ShieldBashPacket {
             }
         }
 
-        return entity == null ? null : new EntityRayTraceResult(entity, vector3d);
+        return entity == null ? null : new EntityHitResult(entity, vector3d);
     }
     /*
 

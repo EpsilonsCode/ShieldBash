@@ -1,18 +1,15 @@
 package com.omircon.shield_bash.glm;
 
-import com.omircon.shield_bash.Registries;
-import com.omircon.shield_bash.ShieldBash;
 import com.google.gson.JsonObject;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 
@@ -26,7 +23,7 @@ public class AutoSmeltLootModifier extends LootModifier {
      *
      * @param conditionsIn the ILootConditions that need to be matched before the loot is modified.
      */
-    public AutoSmeltLootModifier(ILootCondition[] conditionsIn) {
+    public AutoSmeltLootModifier(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
     }
 
@@ -37,14 +34,14 @@ public class AutoSmeltLootModifier extends LootModifier {
         List<ItemStack> removeList = new ArrayList<>();
         List<ItemStack> addList = new ArrayList<>();
         int lvl = 0;//EnchantmentHelper.getItemEnchantmentLevel(Registries.SMELTING_TOUCH.get(), context.getParamOrNull(LootParameters.TOOL).copy());
-        Entity entity = context.getParamOrNull(LootParameters.THIS_ENTITY);
+        Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
         if(entity != null && lvl>=1 && generatedLoot != null)
         {
-            List<FurnaceRecipe> list = entity.getCommandSenderWorld().getRecipeManager().getAllRecipesFor(IRecipeType.SMELTING);
+            List<SmeltingRecipe> list = entity.getCommandSenderWorld().getRecipeManager().getAllRecipesFor(RecipeType.SMELTING);
             for(ItemStack stack : generatedLoot)
             {
                 ItemStack item = stack;
-                for(FurnaceRecipe recipe : list)
+                for(SmeltingRecipe recipe : list)
                 {
                     Ingredient ingredient = recipe.getIngredients().get(0);
                         if(ingredient.test(stack))
@@ -80,7 +77,7 @@ public class AutoSmeltLootModifier extends LootModifier {
     {
 
         @Override
-        public AutoSmeltLootModifier read(ResourceLocation location, JsonObject object, ILootCondition[] ailootcondition) {
+        public AutoSmeltLootModifier read(ResourceLocation location, JsonObject object, LootItemCondition[] ailootcondition) {
             return new AutoSmeltLootModifier(ailootcondition);
         }
 

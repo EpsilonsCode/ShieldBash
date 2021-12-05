@@ -1,13 +1,15 @@
 package com.omircon.shield_bash.enchantments;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.entity.EquipmentSlot;
+
+import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 
 public class SmeltingTouchEnchantment extends Enchantment {
     public SmeltingTouchEnchantment() {
-        super(Rarity.RARE, EnchantmentType.DIGGER, new EquipmentSlotType[]{ EquipmentSlotType.MAINHAND });
+        super(Rarity.RARE, EnchantmentCategory.DIGGER, new EquipmentSlot[]{ EquipmentSlot.MAINHAND });
     }
 
     @Override
