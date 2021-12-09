@@ -4,13 +4,13 @@ import com.omircon.shield_bash.enchantments.GuardEnchantment;
 import com.omircon.shield_bash.enchantments.SmeltingTouchEnchantment;
 import com.omircon.shield_bash.enchantments.SpikesEnchantment;
 import com.omircon.shield_bash.glm.AutoSmeltLootModifier;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import static com.omircon.shield_bash.ShieldBash.MODID;
 
