@@ -1,12 +1,14 @@
 package com.omircon.shield_bash.glm;
 
 import com.google.gson.JsonObject;
+import com.omircon.shield_bash.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -33,7 +35,7 @@ public class AutoSmeltLootModifier extends LootModifier {
     {
         List<ItemStack> removeList = new ArrayList<>();
         List<ItemStack> addList = new ArrayList<>();
-        int lvl = 0;//EnchantmentHelper.getItemEnchantmentLevel(Registries.SMELTING_TOUCH.get(), context.getParamOrNull(LootParameters.TOOL).copy());
+        int lvl = 0; // EnchantmentHelper.getItemEnchantmentLevel(Registries.SMELTING_TOUCH.get(), context.getParamOrNull(LootContextParams.TOOL).copy());
         Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
         if(entity != null && lvl>=1 && generatedLoot != null)
         {

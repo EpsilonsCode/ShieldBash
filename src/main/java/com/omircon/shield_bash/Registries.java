@@ -23,7 +23,7 @@ public class Registries {
 
     public static final RegistryObject<GuardEnchantment> GUARD = ENCHANTS.register("guard", () -> new GuardEnchantment());
 
-    public static final RegistryObject<SmeltingTouchEnchantment> SMELTING_TOUCH = ENCHANTS.register("smelting_touch", () -> new SmeltingTouchEnchantment());
+    //public static final RegistryObject<SmeltingTouchEnchantment> SMELTING_TOUCH = ENCHANTS.register("smelting_touch", () -> new SmeltingTouchEnchantment());
 
     public static final RegistryObject<SpikesEnchantment> SPIKES = ENCHANTS.register("spikes", () -> new SpikesEnchantment());
 
