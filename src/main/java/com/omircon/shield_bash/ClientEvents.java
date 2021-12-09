@@ -73,9 +73,9 @@ public class ClientEvents {
             event.setCanceled(true);
             InteractionHand pHand = event.getHand();
 
-            PoseStack pMatrixStack = event.getMatrixStack();
-            MultiBufferSource pBuffer = event.getBuffers();
-            int pCombinedLight = event.getLight();
+            PoseStack pMatrixStack = event.getPoseStack();
+            MultiBufferSource pBuffer = event.getMultiBufferSource();
+            int pCombinedLight = event.getPackedLight();
             float pSwingProgress = event.getSwingProgress();
             float pEquippedProgress = event.getEquipProgress();
             boolean flag = pHand == InteractionHand.MAIN_HAND;
